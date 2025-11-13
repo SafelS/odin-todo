@@ -22,6 +22,19 @@ function getTodos(){
     return todos;
 }
 
+function updateTodo(index, newTitle, newDescription){
+
+    const todo = todos[index];
+
+    if(newTitle){
+        todo.setTitle(newTitle);
+    }
+    if(newDescription){
+        todo.setDescription(newDescription);
+    }
+    
+}
 
 
-export {addTodo, deleteTodo, getTodos};
+
+export {addTodo, deleteTodo, getTodos, updateTodo};

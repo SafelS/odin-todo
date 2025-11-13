@@ -68,15 +68,15 @@ const DOMHandler = (() =>{
 
     //Idee: renderPopUp() ein "mode" arg hinzufüge um zw. "add" & "edit" zu wechslen, statt für edit eine eigene function!
 
-    function renderPopUp(){
+    function renderPopUp(index, mode = "add"){
 
         //pop-up
         const popUp = document.createElement("div");
 
-        const titleInput = document.createElement("textarea");
-        const descInput = document.createElement("textarea");
+        let titleInput = document.createElement("textarea");
+        let descInput = document.createElement("textarea");
         const btnDiv = document.createElement("div");
-        const addBtn = document.createElement("button");
+        const changeBtn = document.createElement("button");
         const cancelBtn = document.createElement("button");
 
         popUp.classList.add("popUp");
@@ -89,18 +89,35 @@ const DOMHandler = (() =>{
 
             btnDiv.classList.add("btnDiv")
 
-            addBtn.classList.add("addBtn");
-            addBtn.textContent = "ADD";
-
+            changeBtn.classList.add("changeBtn");
+    
             cancelBtn.classList.add("cancelBtn");
             cancelBtn.textContent = "CANCEL"
 
-            btnDiv.append(cancelBtn,addBtn);
 
-        popUp.append(titleInput,descInput, btnDiv);
+        if(mode === "edit"){
+
+            changeBtn.textContent = "SAVE";
+            changeBtn.classList.add("save");
+            changeBtn.dataset.index = index;
+            //console.log(getTodos()[index].title); 
+            titleInput.value = getTodos()[index].title;
+            descInput.value = getTodos()[index].description;
+        }else{
+            changeBtn.textContent = "ADD";
+            changeBtn.classList.add("add");
+        }
+
+        btnDiv.append(cancelBtn,changeBtn);
+        popUp.append(titleInput, descInput, btnDiv);
 
         mainContainer.append(popUp);
 
+    }
+
+    function removeExistingPopUp(){
+        const existingPopUp = document.querySelector(".popUp");
+        if(existingPopUp)  existingPopUp.remove();
     }
 
 
@@ -116,35 +133,42 @@ const DOMHandler = (() =>{
             todoItemDiv.classList.add("todoItemDiv");
             
 
-            //----Das gehört nicht hierhin-------
+            /*----Das gehört nicht hierhin-------
             todoItemDiv.addEventListener("click", () =>{
                 alert("I was clicked");
             });
-            //-----------------------------------
+            //-----------------------------------*/
 
             const todoItemDivTitle = document.createElement("div");
             todoItemDivTitle.classList.add("todoItemDivTitle");
             todoItemDivTitle.textContent = todo.title;
 
-            const deleteButton = document.createElement("button");
-            deleteButton.classList.add("deleteBtn");
-            deleteButton.textContent = "Delete";
-            deleteButton.dataset.index = index;
+            const todoItemDivDesc = document.createElement("div");
+            todoItemDivDesc.classList.add("todoItemDivDesc");
+            todoItemDivDesc.textContent = todo.description;
 
-            const editButton = document.createElement("button");
-            editButton.classList.add("editBtn");
-            editButton.textContent = "Edit";
-            editButton.dataset.index = index;
+            const todoBtnDiv = document.createElement("div");
+            todoBtnDiv.classList.add("todoBtnDiv");
+
+                const deleteButton = document.createElement("button");
+                deleteButton.classList.add("deleteBtn");
+                deleteButton.textContent = "Delete";
+                deleteButton.dataset.index = index;
+
+                const editButton = document.createElement("button");
+                editButton.classList.add("editBtn");
+                editButton.textContent = "Edit";
+                editButton.dataset.index = index;
             
             
-        
-            todoItemDiv.append(todoItemDivTitle, deleteButton, editButton);
+            todoBtnDiv.append(deleteButton,editButton);
+            todoItemDiv.append(todoItemDivTitle, todoItemDivDesc, todoBtnDiv);
             todoDiv.append(todoItemDiv);
         })
     }
 
 
-    function openEditPopUp(){
+    /*function openEditPopUp(){
 
         const popUp = document.querySelector(".popUp");
         const editBtn = document.querySelector(".editBtn");
@@ -157,9 +181,9 @@ const DOMHandler = (() =>{
         editedTitle.textContent = currentTitle;
         saveBtn.textContent = "SAVE";
 
-    }
+    }*/
 
-    return {renderlayout, renderTodos, renderPopUp, openEditPopUp};
+    return {renderlayout, renderTodos, renderPopUp,removeExistingPopUp};
 
 
 })();
