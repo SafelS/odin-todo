@@ -16,11 +16,19 @@ const DOMHandler = (() =>{
         const headerTitle = document.createElement("h1");
         headerTitle.textContent = "TO-DO";
 
-        const openPopUp = document.createElement("button");
-        openPopUp.classList.add("openPopUp");
-        openPopUp.textContent = "+";
+        const headerBtnDiv = document.createElement("div");
+        headerBtnDiv.classList.add("headerBtnDiv");
 
-        header.append(headerTitle, openPopUp);
+        const addTodo = document.createElement("button");
+        addTodo.classList.add("addTask");
+        addTodo.textContent = "Add Todo";
+
+        const addPorject = document.createElement("button");
+        addPorject.classList.add("addProject");
+        addPorject.textContent = "Add Project"
+
+        headerBtnDiv.append(addTodo, addPorject);
+        header.append(headerTitle, headerBtnDiv);
 
 
         //sidebar
@@ -96,16 +104,18 @@ const DOMHandler = (() =>{
 
 
         if(mode === "edit"){
-
             changeBtn.textContent = "SAVE";
             changeBtn.classList.add("save");
             changeBtn.dataset.index = index;
             //console.log(getTodos()[index].title); 
             titleInput.value = getTodos()[index].title;
             descInput.value = getTodos()[index].description;
-        }else{
+        }else if(mode === "add"){
             changeBtn.textContent = "ADD";
             changeBtn.classList.add("add");
+        }else if(mode === "project"){
+            changeBtn.textContent = "ADD"
+            changeBtn.classList.add("projectAdd");
         }
 
         btnDiv.append(cancelBtn,changeBtn);
@@ -165,6 +175,12 @@ const DOMHandler = (() =>{
             todoItemDiv.append(todoItemDivTitle, todoItemDivDesc, todoBtnDiv);
             todoDiv.append(todoItemDiv);
         })
+    }
+
+    //TODO!!!!!!!!!!!!!!
+    function renderProjects(){
+        const todoDiv = document.querySelector(".todoDiv");
+
     }
 
 

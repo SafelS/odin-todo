@@ -31,7 +31,7 @@ document.querySelector(".todoDiv").addEventListener("click", (e) =>{
 });
 
 
-document.querySelector(".openPopUp").addEventListener("click", () =>{
+document.querySelector(".addTask").addEventListener("click", () =>{
     DOMHandler.removeExistingPopUp();
     DOMHandler.renderPopUp();
     document.querySelector(".popUp").classList.add("active");
