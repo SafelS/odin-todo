@@ -1,5 +1,7 @@
 
 import { getTodos, addTodo } from "./todoManager";
+import { getProjects } from "./projectsManager";
+import { da } from "date-fns/locale";
 
 const DOMHandler = (() =>{
 
@@ -7,6 +9,21 @@ const DOMHandler = (() =>{
     
 
     function renderlayout(){
+
+        /*Test
+        const input = document.createElement("input");
+        input.setAttribute("list", "test");
+
+        const dataList = document.createElement("datalist");
+        dataList.id = "test";
+
+        const option1 = document.createElement("option");
+        option1.value = "hahalol";
+        dataList.append(option1);
+        */   
+
+        const dataList = document.createElement("datalist");
+        dataList.id = "projectList";
 
 
         //header
@@ -68,7 +85,7 @@ const DOMHandler = (() =>{
 
 
 
-        mainContainer.append(header, sidebar, content);
+        mainContainer.append(header, sidebar, content, dataList/*input, dataList*/);
 
 
 
@@ -76,11 +93,11 @@ const DOMHandler = (() =>{
 
     //Idee: renderPopUp() ein "mode" arg hinzufüge um zw. "add" & "edit" zu wechslen, statt für edit eine eigene function!
 
-    function renderPopUp(index, mode = "add"){
+    function renderPopUp(mode = "add", index){
 
         //pop-up
         const popUp = document.createElement("div");
-
+        let projectInput = document.createElement("input");
         let titleInput = document.createElement("textarea");
         let descInput = document.createElement("textarea");
         const btnDiv = document.createElement("div");
@@ -88,6 +105,13 @@ const DOMHandler = (() =>{
         const cancelBtn = document.createElement("button");
 
         popUp.classList.add("popUp");
+
+        projectInput.classList.add("projectInput");
+        projectInput.setAttribute("list", "projectList");
+        projectInput.placeholder = "Add to Project"
+
+
+
         
         
         titleInput.classList.add("titleInput");
@@ -119,8 +143,14 @@ const DOMHandler = (() =>{
         }
 
         btnDiv.append(cancelBtn,changeBtn);
-        popUp.append(titleInput, descInput, btnDiv);
+        popUp.append(titleInput);
+        //popUp.append(titleInput, descInput, btnDiv);
 
+        if(mode !== "project"){
+            popUp.append(projectInput,descInput);
+        }
+        
+        popUp.append(btnDiv);
         mainContainer.append(popUp);
 
     }
@@ -177,29 +207,33 @@ const DOMHandler = (() =>{
         })
     }
 
-    //TODO!!!!!!!!!!!!!!
+    
     function renderProjects(){
-        const todoDiv = document.querySelector(".todoDiv");
+        const dataList = document.getElementById("projectList");
+        const projectsList = document.querySelector(".projectsList");
+        projectsList.innerHTML = "";
+        dataList.innerHTML = "";
+
+        getProjects().forEach((project, index) =>{
+            const projectItem = document.createElement("li");
+            projectItem.classList.add("projectItem");
+            projectItem.textContent = project.name;
+
+            const option = document.createElement("option");
+            option.value = project.name;
+            dataList.append(option);
+            
+
+            projectsList.append(projectItem);
+
+        })
+    }
+
+    function openProjectContent(){
 
     }
 
-
-    /*function openEditPopUp(){
-
-        const popUp = document.querySelector(".popUp");
-        const editBtn = document.querySelector(".editBtn");
-        const editedTitle = document.querySelector(".titleInput");
-        //const editedDesc = document.querySelector(".descInput");
-        const currentTitle = getTodos()[editBtn.dataset.index].title;
-        console.log(currentTitle);
-        const saveBtn = document.querySelector(".addBtn");
-
-        editedTitle.textContent = currentTitle;
-        saveBtn.textContent = "SAVE";
-
-    }*/
-
-    return {renderlayout, renderTodos, renderPopUp,removeExistingPopUp};
+    return {renderlayout, renderTodos, renderPopUp,removeExistingPopUp, renderProjects};
 
 
 })();

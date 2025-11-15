@@ -2,6 +2,7 @@
 import DOMHandler from "./dom";
 import Todo from "./todo";
 import { addTodo, deleteTodo, getTodos, updateTodo } from "./todoManager";
+import { addProject } from "./projectsManager";
 import "./style.css"
 
 
@@ -24,7 +25,7 @@ document.querySelector(".todoDiv").addEventListener("click", (e) =>{
     if(e.target.classList.contains("editBtn")){
         DOMHandler.removeExistingPopUp();
         const index = e.target.dataset.index;
-        DOMHandler.renderPopUp(index,"edit");
+        DOMHandler.renderPopUp("edit", index);
         document.querySelector(".popUp").classList.add("active");
          
     }
@@ -44,17 +45,22 @@ document.addEventListener("click", (e) => {
         document.querySelector(".popUp").classList.remove("active");
     }
 
+    //Todo in Add Mode, Button logic
     if(e.target.classList.contains("add")){
         let titleValue = document.querySelector(".titleInput").value.trim();
         let descValue = document.querySelector(".descInput").value.trim();
+        let projectValue = document.querySelector(".projectInput").value.trim();
         addTodo(titleValue, descValue);
+        addProject(projectValue);
         DOMHandler.renderTodos();
+        DOMHandler.renderProjects();
         document.querySelector(".popUp").classList.remove("active");
         document.querySelector(".titleInput").value = "";
         document.querySelector(".descInput").value = "";
 
     }
 
+    //Todo in Edit Mode
     if(e.target.classList.contains("save")){
         let newTitle = document.querySelector(".titleInput").value.trim();
         let newDescription = document.querySelector(".descInput").value.trim();
@@ -65,6 +71,26 @@ document.addEventListener("click", (e) => {
         document.querySelector(".popUp").classList.remove("active");
         DOMHandler.renderTodos();
 
+    }
+
+    //Todo in Project Mode
+    if(e.target.classList.contains("addProject")){
+        
+        DOMHandler.removeExistingPopUp();
+        DOMHandler.renderPopUp("project");
+        document.querySelector(".popUp").classList.add("active");
+
+    }
+
+    if(e.target.classList.contains("projectAdd")){
+        let projectName = document.querySelector(".titleInput").value.trim();
+        addProject(projectName);
+        DOMHandler.renderProjects();
+        document.querySelector(".popUp").classList.remove("active");
+    }
+
+    if(e.target.classList.contains("projectItem")){
+        alert("It works!!");
     }
 })
 
